@@ -1,5 +1,6 @@
 package com.pawel.tagcloud;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class TagCloudModel extends Observable {
     public static int TAGCOUNTER = 0;
     private Map<String, Tag> cloud;
     private String defaultLink;
+    private int tagCloudSize;
     private int fontSize;
     private Tag maxCount;
     private Tag minCount;
@@ -23,9 +25,10 @@ public class TagCloudModel extends Observable {
     }
 
     public TagCloudModel(String defaultLink){
-        cloud = new HashMap<String, Tag>();
+        this.cloud = new HashMap<String, Tag>();
         this.defaultLink = defaultLink;
-        this.fontSize = 15;
+        this.tagCloudSize = 5;
+        this.fontSize = 20;
         this.maxCount = new Tag("", "", 0);
         this.minCount = new Tag("", "", 0);
     }
@@ -39,6 +42,9 @@ public class TagCloudModel extends Observable {
         for(Tag tag: cloud.values()){
             tagList.add(tag);
         }
+
+        Collections.sort((List<Tag>) tagList);
+
         return tagList;
     }
 
@@ -115,6 +121,20 @@ public class TagCloudModel extends Observable {
 //		this.fireChange();
 //	}
 
+    public Tag getTagByID(int ID){
+        LinkedList<Tag> set = new LinkedList<>();
+        set.addAll(cloud.values());
+        Tag returnTag = null;
+        int i = 0;
+
+        while(i < set.size() && returnTag == null){
+            if(ID == set.get(i).getTagID())
+                returnTag = set.get(i);
+            i++;
+        }
+        return returnTag;
+    }
+
     public int getFontSize(){
         return this.fontSize;
     }
@@ -164,7 +184,27 @@ public class TagCloudModel extends Observable {
         return this.cloud;
     }
 
-    public int getTagSize(){
+    public int numberOfTagsToDisplay(){
+        int numberOfTagsToDisplay = 0;
+        for(int i = 1; i < tagCloudSize; i++){
+            numberOfTagsToDisplay += 2*i;
+        }
+        return numberOfTagsToDisplay + tagCloudSize;
+    }
+
+    public int getTagCloudSize() {
+        return tagCloudSize;
+    }
+
+    public boolean setTagCloudSize(int tagCloudSize) {
+        if(tagCloudSize > 0) {
+            this.tagCloudSize = tagCloudSize;
+            return true;
+        }
+        return false;
+    }
+
+    public int getNumberOfTags(){
         return this.cloud.size();
     }
 

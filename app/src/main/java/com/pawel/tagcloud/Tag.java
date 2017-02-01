@@ -4,7 +4,7 @@ package com.pawel.tagcloud;
  * Created by Pawel on 20.01.2017.
  */
 
-public class Tag {
+public class Tag implements Comparable{
 
     private String name;
     private String link;
@@ -39,7 +39,7 @@ public class Tag {
         this.name = tag.getName();
         this.link = tag.getLink();
         this.count = tag.getCount();
-        tagID = TagCloudModel.TAGCOUNTER++;
+        tagID = this.getTagID();
     }
 
     public int getSize(){
@@ -84,6 +84,16 @@ public class Tag {
         return tagID;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        Tag o1 = (Tag) o;
+        if(this.getCount() < o1.getCount())
+            return 1;
+        if(this.getCount() == o1.getCount())
+            return 0;
+        return -1;
+    }
+
     public boolean equals(Object obj){
         if(this == obj)
             return true;
@@ -102,7 +112,7 @@ public class Tag {
     }
 
     public String toString(){
-        return "Tag: " + this.name + ", link: " + this.link + ", liczba wystapien: " + this.count + ", fontSize: " + this.size;
+        return "Tag: " + this.name +", link: " + this.link + ", liczba wystapien: " + this.count + ", fontSize: " + this.size;
     }
 }
 
